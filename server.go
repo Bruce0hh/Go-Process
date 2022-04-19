@@ -13,6 +13,7 @@ import (
 
 const MagicNumber = 0x3bef5c
 
+// 请求Option部分
 type Option struct {
 	MagicNumber int
 	CodecType   codec.Type
@@ -31,6 +32,7 @@ func NewServer() *Server {
 
 var DefaultServer = NewServer()
 
+// 服务端接收请求，开启服务连接goroutine
 func (server Server) Accept(lis net.Listener) {
 	for {
 		conn, err := lis.Accept()
@@ -46,6 +48,7 @@ func Accept(lis net.Listener) {
 	DefaultServer.Accept(lis)
 }
 
+// 服务连接
 func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 	defer func() {
 		_ = conn.Close()
@@ -69,6 +72,7 @@ func (server *Server) ServeConn(conn io.ReadWriteCloser) {
 
 var invalidRequest = struct{}{}
 
+// 服务端处理
 func (server Server) serverCodec(cc codec.Codec) {
 	sending := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
@@ -90,11 +94,13 @@ func (server Server) serverCodec(cc codec.Codec) {
 	_ = cc.Close()
 }
 
+// request 数据结构
 type request struct {
 	h           *codec.Header
 	argv, reply reflect.Value
 }
 
+// 读取请求头
 func (server Server) readRequestHeader(cc codec.Codec) (*codec.Header, error) {
 	var h codec.Header
 	if err := cc.ReaderHeader(&h); err != nil {
@@ -106,6 +112,7 @@ func (server Server) readRequestHeader(cc codec.Codec) (*codec.Header, error) {
 	return &h, nil
 }
 
+// 读取request——包括requestHeader+requestBody
 func (server *Server) readRequest(cc codec.Codec) (*request, error) {
 	h, err := server.readRequestHeader(cc)
 	if err != nil {
@@ -119,6 +126,7 @@ func (server *Server) readRequest(cc codec.Codec) (*request, error) {
 	return req, nil
 }
 
+// 返回应答信息
 func (server *Server) sendResponse(cc codec.Codec, h *codec.Header, body interface{}, sending *sync.Mutex) {
 	sending.Lock()
 	defer sending.Unlock()
@@ -127,6 +135,7 @@ func (server *Server) sendResponse(cc codec.Codec, h *codec.Header, body interfa
 	}
 }
 
+// 处理request
 func (server *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
 	defer wg.Done()
 	log.Println(req.h, req.argv.Elem())
