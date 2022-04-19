@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" contentStyleType="text/css" height="1245px" preserveAspectRatio="none" style="width:1598px;height:1245px;background:#FFFFFF;" version="1.1" viewBox="0 0 1598 1245" width="1598px" zoomAndPan="magnify"><defs/><g><!--MD5=[54491ee148f19395e4f38c2424eafb05]
+cluster server.Accept\n服务端for循环--><g id="cluster_server.Accept\n服务端for循环"><path d="M590,157 L702,157 A3.75,3.75 0 0 1 704.5,159.5 L711.5,195.5938 L837,195.5938 A2.5,2.5 0 0 1 839.5,198.0938 L839.5,353.5 A2.5,2.5 0 0 1 837,356 L590,356 A2.5,2.5 0 0 1 587.5,353.5 L587.5,159.5 A2.5,2.5 0 0 1 590,157 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="587.5" x2="711.5" y1="195.5938" y2="195.5938"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="111" x="591.5" y="171.9951">server.Accept</text><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="99" x="597.5" y="188.292">服务端for循环</text></g><!--MD5=[63fbe38940c50b1c9093de5963d8a9bc]
+cluster go协程处理连接--><g id="cluster_go协程处理连接"><path d="M442,380 L553,380 A3.75,3.75 0 0 1 555.5,382.5 L562.5,402.2969 L915,402.2969 A2.5,2.5 0 0 1 917.5,404.7969 L917.5,1003.5 A2.5,2.5 0 0 1 915,1006 L442,1006 A2.5,2.5 0 0 1 439.5,1003.5 L439.5,382.5 A2.5,2.5 0 0 1 442,380 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="439.5" x2="562.5" y1="402.2969" y2="402.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="110" x="443.5" y="394.9951">go协程处理连接</text></g><!--MD5=[d7582e31efa90183f1e590a96f1fbeb7]
+cluster server.serveConn--><g id="cluster_server.serveConn"><path d="M506,423 L645,423 A3.75,3.75 0 0 1 647.5,425.5 L654.5,445.2969 L891,445.2969 A2.5,2.5 0 0 1 893.5,447.7969 L893.5,705.5 A2.5,2.5 0 0 1 891,708 L506,708 A2.5,2.5 0 0 1 503.5,705.5 L503.5,425.5 A2.5,2.5 0 0 1 506,423 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="503.5" x2="654.5" y1="445.2969" y2="445.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="138" x="507.5" y="437.9951">server.serveConn</text></g><!--MD5=[785db989e6d8fe66338b6ae37ee144f2]
+cluster server.serveCodec--><g id="cluster_server.serveCodec"><path d="M466,732 L613,732 A3.75,3.75 0 0 1 615.5,734.5 L622.5,754.2969 L891,754.2969 A2.5,2.5 0 0 1 893.5,756.7969 L893.5,979.5 A2.5,2.5 0 0 1 891,982 L466,982 A2.5,2.5 0 0 1 463.5,979.5 L463.5,734.5 A2.5,2.5 0 0 1 466,732 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="463.5" x2="622.5" y1="754.2969" y2="754.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="146" x="467.5" y="746.9951">server.serveCodec</text></g><!--MD5=[b14b3b7eb2d341a17923a96461fa762f]
+cluster for循环处理Headers和Bodies--><g id="cluster_for循环处理Headers和Bodies"><path d="M490,775 L709,775 A3.75,3.75 0 0 1 711.5,777.5 L718.5,797.2969 L867,797.2969 A2.5,2.5 0 0 1 869.5,799.7969 L869.5,955.5 A2.5,2.5 0 0 1 867,958 L490,958 A2.5,2.5 0 0 1 487.5,955.5 L487.5,777.5 A2.5,2.5 0 0 1 490,775 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="487.5" x2="718.5" y1="797.2969" y2="797.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="218" x="491.5" y="789.9951">for循环处理Headers和Bodies</text></g><!--MD5=[a242d862b545be00399354aba7ff1d32]
+cluster server.readRequest--><g id="cluster_server.readRequest"><path d="M958,775 L1116,775 A3.75,3.75 0 0 1 1118.5,777.5 L1125.5,797.2969 L1285,797.2969 A2.5,2.5 0 0 1 1287.5,799.7969 L1287.5,1114.5 A2.5,2.5 0 0 1 1285,1117 L958,1117 A2.5,2.5 0 0 1 955.5,1114.5 L955.5,777.5 A2.5,2.5 0 0 1 958,775 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="955.5" x2="1125.5" y1="797.2969" y2="797.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="157" x="959.5" y="789.9951">server.readRequest</text></g><!--MD5=[4b4edfcca8ed146ef19741549a58f79d]
+cluster server.handleRequest协程--><g id="cluster_server.handleRequest协程"><path d="M428,1030 L634,1030 A3.75,3.75 0 0 1 636.5,1032.5 L643.5,1052.2969 L929,1052.2969 A2.5,2.5 0 0 1 931.5,1054.7969 L931.5,1235.5 A2.5,2.5 0 0 1 929,1238 L428,1238 A2.5,2.5 0 0 1 425.5,1235.5 L425.5,1032.5 A2.5,2.5 0 0 1 428,1030 " style="stroke:#000000;stroke-width:1.5;fill:none;"/><line style="stroke:#000000;stroke-width:1.5;fill:none;" x1="425.5" x2="643.5" y1="1052.2969" y2="1052.2969"/><text fill="#000000" font-family="sans-serif" font-size="14" font-weight="bold" lengthAdjust="spacing" textLength="205" x="429.5" y="1044.9951">server.handleRequest协程</text></g><!--MD5=[787a6938dd43f7bb93cbbcf13d53b49e]
+entity conn, err = socket.Accept()--><g id="elem_conn, err = socket.Accept()"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="219" x="604" y="208"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="199" x="614" y="230.9951">conn, err = socket.Accept()</text></g><!--MD5=[08954c21214e340a485438486ba035e3]
+entity go server.serveConn(conn)--><g id="elem_go server.serveConn(conn)"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="213" x="607" y="304"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="193" x="617" y="326.9951">go server.serveConn(conn)</text></g><!--MD5=[528165b70eec65714085dcf005db0353]
+entity json.NewDecoder(conn).Decode(&opt)--><g id="elem_json.NewDecoder(conn).Decode(&amp;opt)"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="297" x="565" y="458"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="277" x="575" y="480.9951">json.NewDecoder(conn).Decode(&amp;opt)</text></g><!--MD5=[48d248be31c308a575cd2d4e028ae410]
+entity server.serveCodec(f(conn))--><g id="elem_server.serveCodec(f(conn))"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="215" x="591" y="656"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="195" x="601" y="678.9951">server.serveCodec(f(conn))</text></g><!--MD5=[f83ae91a690dfc657e1c5fbbd818f13d]
+entity a--><g id="elem_a"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="358" x="519.5" y="558"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="338" x="529.5" y="580.9951">f := codec.NewCodecFuncMap[opt.CodecType]</text></g><!--MD5=[e4dfc8d2f7221687a6d775560bd93164]
+entity req, err := server.readRequest(cc)--><g id="elem_req, err := server.readRequest(cc)"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="264" x="566.5" y="810"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="244" x="576.5" y="832.9951">req, err := server.readRequest(cc)</text></g><!--MD5=[6765b309d0e3b74fcec5271aeb858dca]
+entity go server.handleRequest(cc, req, sending, wg)--><g id="elem_go server.handleRequest(cc, req, sending, wg)"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="349" x="504" y="906"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="329" x="514" y="928.9951">go server.handleRequest(cc, req, sending, wg)</text></g><!--MD5=[0dd452a916eaabd6711d08245bfdd9fd]
+entity h, err := server.readRequestHeader(cc)--><g id="elem_h, err := server.readRequestHeader(cc)"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="300" x="971.5" y="810"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="280" x="981.5" y="832.9951">h, err := server.readRequestHeader(cc)</text></g><!--MD5=[046989fb97caca5b7b1ec82c2ca381bf]
+entity req := &request{h: h}--><g id="elem_req := &amp;request{h: h}"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="179" x="1048" y="906"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="159" x="1058" y="928.9951">req := &amp;request{h: h}</text></g><!--MD5=[7e1b134897c943ebbdf64d7911535f04]
+entity cc.ReadBody(req.argv.Interface())--><g id="elem_cc.ReadBody(req.argv.Interface())"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="264" x="1005.5" y="1065"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="244" x="1015.5" y="1087.9951">cc.ReadBody(req.argv.Interface())</text></g><!--MD5=[b6cdde6552c0c56159dc35225e2f322d]
+entity req.replyv = 'xxx'--><g id="elem_req.replyv = 'xxx'"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="145" x="606" y="1065"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="125" x="616" y="1087.9951">req.replyv = 'xxx'</text></g><!--MD5=[beb389c9c28fc3d104db9f307abfcd3d]
+entity server.sendResponse(cc, req.h, req.replyv.Interface(), sending)--><g id="elem_server.sendResponse(cc, req.h, req.replyv.Interface(), sending)"><rect fill="#F1F1F1" height="36.2969" rx="2.5" ry="2.5" style="stroke:#181818;stroke-width:0.5;" width="473" x="442" y="1186"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="453" x="452" y="1208.9951">server.sendResponse(cc, req.h, req.replyv.Interface(), sending)</text></g><!--MD5=[53baae1588147d6d6e569aaad22dbdff]
+entity 数据--><g id="elem_数据"><ellipse cx="713.5" cy="73.5" fill="#F1F1F1" rx="8" ry="8" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="14" lengthAdjust="spacing" textLength="28" x="699.5" y="103.4951">数据</text></g><g id="elem_GMN461999"><path d="M858,213.5 L858,222 L823.328,226 L858,230 L858,238.6328 A0,0 0 0 0 858,238.6328 L965,238.6328 A0,0 0 0 0 965,238.6328 L965,223.5 L955,213.5 L858,213.5 A0,0 0 0 0 858,213.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M955,213.5 L955,223.5 L965,223.5 L955,213.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="86" x="864" y="230.5669">接受请求 (tcp)</text></g><g id="elem_GMN462002"><path d="M856,309.5 L856,318 L820.141,322 L856,326 L856,334.6328 A0,0 0 0 0 856,334.6328 L971,334.6328 A0,0 0 0 0 971,334.6328 L971,319.5 L961,309.5 L856,309.5 A0,0 0 0 0 856,309.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M961,309.5 L961,319.5 L971,319.5 L961,309.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="94" x="862" y="326.5669">go协程处理连接</text></g><g id="elem_GMN462005"><path d="M934,456 L934,472 L862.238,476 L934,480 L934,496.2656 A0,0 0 0 0 934,496.2656 L1301,496.2656 A0,0 0 0 0 1301,496.2656 L1301,466 L1291,456 L934,456 A0,0 0 0 0 934,456 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1291,456 L1291,466 L1301,466 L1291,456 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="346" x="940" y="473.0669">尝试从数据头部解析出option，得到编码类型CodecType，</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="102" x="940" y="488.1997">只实现了gob编码</text></g><g id="elem_GMN462008"><path d="M934,556 L934,572 L877.711,576 L934,580 L934,596.2656 A0,0 0 0 0 934,596.2656 L1275,596.2656 A0,0 0 0 0 1275,596.2656 L1275,566 L1265,556 L934,556 A0,0 0 0 0 934,556 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1265,556 L1265,566 L1275,566 L1265,556 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="283" x="940" y="573.0669">获取创建对应Codec对象的函数, Codec类封装了</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="320" x="940" y="588.1997">怎么从conn中read, write，解析header和body的方法</text></g><g id="elem_GMN462011"><path d="M1307,815.5 L1307,824 L1271.94,828 L1307,832 L1307,840.6328 A0,0 0 0 0 1307,840.6328 L1400,840.6328 A0,0 0 0 0 1400,840.6328 L1400,825.5 L1390,815.5 L1307,815.5 A0,0 0 0 0 1307,815.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1390,815.5 L1390,825.5 L1400,825.5 L1390,815.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="72" x="1313" y="832.5669">解析Header</text></g><g id="elem_GMN462014"><path d="M1305,1070.5 L1305,1079 L1269.71,1083 L1305,1087 L1305,1095.6328 A0,0 0 0 0 1305,1095.6328 L1384,1095.6328 A0,0 0 0 0 1384,1095.6328 L1384,1080.5 L1374,1070.5 L1305,1070.5 A0,0 0 0 0 1305,1070.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1374,1070.5 L1374,1080.5 L1384,1080.5 L1374,1070.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="58" x="1311" y="1087.5669">解析Body</text></g><g id="elem_GMN462017"><path d="M1303.5,911.5 L1303.5,920 L1227.11,924 L1303.5,928 L1303.5,936.6328 A0,0 0 0 0 1303.5,936.6328 L1591.5,936.6328 A0,0 0 0 0 1591.5,936.6328 L1591.5,921.5 L1581.5,911.5 L1303.5,911.5 A0,0 0 0 0 1303.5,911.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1581.5,911.5 L1581.5,921.5 L1591.5,921.5 L1581.5,911.5 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="267" x="1309.5" y="928.5669">解析出的header和body信息放在req结构体里</text></g><g id="elem_GMN462020"><path d="M758,6 L758,69.5 L722.75,73.5 L758,77.5 L758,141.0625 A0,0 0 0 0 758,141.0625 L1181,141.0625 A0,0 0 0 0 1181,141.0625 L1181,16 L1171,6 L758,6 A0,0 0 0 0 758,6 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M1171,6 L1171,16 L1181,16 L1171,6 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="26" x="764" y="23.0669">格式</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="4" x="764" y="38.1997"> </text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="42" x="768" y="55.3325">Option</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="54" x="818" y="55.3325">Header1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="40" x="880" y="55.3325">Body1</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="54" x="928" y="55.3325">Header2</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="40" x="990" y="55.3325">Body2</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="24" x="1038" y="55.3325">......</text><line style="stroke:#000000;stroke-width:0.5;" x1="764" x2="1066" y1="43.2656" y2="43.2656"/><line style="stroke:#000000;stroke-width:0.5;" x1="764" x2="1066" y1="58.3984" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="764" x2="764" y1="43.2656" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="814" x2="814" y1="43.2656" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="876" x2="876" y1="43.2656" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="924" x2="924" y1="43.2656" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="986" x2="986" y1="43.2656" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="1034" x2="1034" y1="43.2656" y2="58.3984"/><line style="stroke:#000000;stroke-width:0.5;" x1="1066" x2="1066" y1="43.2656" y2="58.3984"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="4" x="764" y="72.4653"> </text><ellipse cx="769.5" cy="83.1641" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="344" x="777" y="87.5981">Option用json编码，含有MagicNumber和CodecType字段</text><ellipse cx="769.5" cy="98.2969" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="202" x="777" y="102.731">Header和Body用CodecType编码</text><ellipse cx="769.5" cy="113.4297" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="389" x="777" y="117.8638">允许多个Header和Body可以实现在一次TCP连接进行多个RPC调用</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="4" x="764" y="132.9966"> </text></g><g id="elem_GMN462023"><path d="M6,1040 L6,1125.6641 A0,0 0 0 0 6,1125.6641 L409,1125.6641 A0,0 0 0 0 409,1125.6641 L409,1050 L399,1040 L337.828,1040 L627.198,942.101 L329.828,1040 L6,1040 A0,0 0 0 0 6,1040 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><path d="M399,1040 L399,1050 L409,1050 L399,1040 " fill="#FEFFDD" style="stroke:#181818;stroke-width:0.5;"/><ellipse cx="17.5" cy="1052.6328" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="352" x="25" y="1057.0669">sending互斥锁用来保证sendResponse时发送完整的响应。</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="278" x="12" y="1072.1997">防止不同handleRequest协程交错响应客户端。</text><ellipse cx="17.5" cy="1082.8984" fill="#000000" rx="2.5" ry="2.5" style="stroke:#000000;stroke-width:0.0;"/><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="369" x="25" y="1087.3325">wg WaitGroup用来等所有handleRequest协程退出后，才退出</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="180" x="12" y="1102.4653">serveCodec函数，关闭连接。</text><text fill="#000000" font-family="sans-serif" font-size="13" lengthAdjust="spacing" textLength="4" x="12" y="1117.5981"> </text></g><!--MD5=[7c76df1a3e8a6ee4598dc819e9316c5c]
+link 数据 to conn, err = socket.Accept()--><g id="link_数据_conn, err = socket.Accept()"><path d="M713.5,82.59 C713.5,105.02 713.5,168.57 713.5,202.69 " fill="none" id="数据-to-conn, err = socket.Accept()" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="713.5,207.91,717.5,198.91,713.5,202.91,709.5,198.91,713.5,207.91" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[125e706a8496ba5ae476ff260576c444]
+link conn, err = socket.Accept() to go server.serveConn(conn)--><!--MD5=[0b70f9185dd44c75efbd2359f0ac45d1]
+link go server.serveConn(conn) to json.NewDecoder(conn).Decode(&opt)--><g id="link_go server.serveConn(conn)_json.NewDecoder(conn).Decode(&amp;opt)"><path d="M713.5,340.141 C713.5,367.737 713.5,422.011 713.5,452.623 " fill="none" id="go server.serveConn(conn)-to-json.NewDecoder(conn).Decode(&amp;opt)" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="713.5,457.689,717.5,448.689,713.5,452.689,709.5,448.689,713.5,457.689" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[0bb93331dedd6294af8db0646237e8df]
+link json.NewDecoder(conn).Decode(&opt) to a--><!--MD5=[bcb6a00b4a8e634cf8fbd1bc7da209dc]
+link a to server.serveCodec(f(conn))--><!--MD5=[d1f764f09320f685d1d81f3596473b09]
+link server.serveCodec(f(conn)) to req, err := server.readRequest(cc)--><g id="link_server.serveCodec(f(conn))_req, err := server.readRequest(cc)"><path d="M698.5,692.141 C698.5,719.737 698.5,774.011 698.5,804.623 " fill="none" id="server.serveCodec(f(conn))-to-req, err := server.readRequest(cc)" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="698.5,809.689,702.5,800.689,698.5,804.689,694.5,800.689,698.5,809.689" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[ba3968a35b6c1f2c75f1ee7d274021b1]
+link req, err := server.readRequest(cc) to go server.handleRequest(cc, req, sending, wg)--><!--MD5=[3362fffff8e2b001bd9c189f3fe38128]
+link req, err := server.readRequest(cc) to h, err := server.readRequestHeader(cc)--><g id="link_req, err := server.readRequest(cc)_h, err := server.readRequestHeader(cc)"><path d="M830.688,828 C875.808,828 920.929,828 966.049,828 " fill="none" id="req, err := server.readRequest(cc)-to-h, err := server.readRequestHeader(cc)" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="971.266,828,962.266,824,966.266,828,962.266,832,971.266,828" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[6bc21a633b778b860318d1b6fd0bff0e]
+link h, err := server.readRequestHeader(cc) to req := &request{h: h}--><!--MD5=[06c1e5a29e6d45d902c14e77982b75f1]
+link req := &request{h: h} to cc.ReadBody(req.argv.Interface())--><!--MD5=[86f1bf66ff6c5a798cad709bf0a36e7d]
+link go server.handleRequest(cc, req, sending, wg) to req.replyv = 'xxx'--><g id="link_go server.handleRequest(cc, req, sending, wg)_req.replyv = 'xxx'"><path d="M678.5,942.101 C678.5,970.649 678.5,1028.003 678.5,1059.689 " fill="none" id="go server.handleRequest(cc, req, sending, wg)-to-req.replyv = 'xxx'" style="stroke:#181818;stroke-width:1.0;"/><polygon fill="#181818" points="678.5,1064.92,682.5,1055.92,678.5,1059.92,674.5,1055.92,678.5,1064.92" style="stroke:#181818;stroke-width:1.0;"/></g><!--MD5=[57cd5b89e273d89cdc7663018a428e5b]
+link req.replyv = 'xxx' to server.sendResponse(cc, req.h, req.replyv.Interface(), sending)--><!--MD5=[d99a67d61a8ae9e688a5bc1acb4de420]
+@startuml
+package "server.Accept\n服务端for循环" {
+    rectangle "conn, err = socket.Accept()"
+    rectangle "go server.serveConn(conn)"
+}
+
+package go协程处理连接 {
+    package server.serveConn{
+        rectangle "json.NewDecoder(conn).Decode(&opt)"
+        rectangle "server.serveCodec(f(conn))"
+        rectangle "f := codec.NewCodecFuncMap[opt.CodecType]" as a
+    }
+    package server.serveCodec {
+        package for循环处理Headers和Bodies {
+            rectangle "req, err := server.readRequest(cc)"
+            rectangle "go server.handleRequest(cc, req, sending, wg)" 
+        }
+      
+    }
+}
+
+package server.readRequest {
+    rectangle "h, err := server.readRequestHeader(cc)"
+    rectangle "req := &request{h: h}"
+    rectangle "cc.ReadBody(req.argv.Interface())"
+}
+
+package server.handleRequest协程 {
+    rectangle "req.replyv = 'xxx'"
+	rectangle "server.sendResponse(cc, req.h, req.replyv.Interface(), sending)"
+}
+
+数据 - -> [conn, err = socket.Accept()]
+[conn, err = socket.Accept()] - -[hidden]> [go server.serveConn(conn)]
+
+[go server.serveConn(conn)] -d-> [json.NewDecoder(conn).Decode(&opt)]
+[json.NewDecoder(conn).Decode(&opt)] - -[hidden]> a
+a - -[hidden]> [server.serveCodec(f(conn))]
+[server.serveCodec(f(conn))] -d-> [req, err := server.readRequest(cc)]
+[req, err := server.readRequest(cc)]- -[hidden]> [go server.handleRequest(cc, req, sending, wg)]
+
+[req, err := server.readRequest(cc)] -r-> [h, err := server.readRequestHeader(cc)]
+[h, err := server.readRequestHeader(cc)] - -[hidden]> [req := &request{h: h}]
+[req := &request{h: h}] - -[hidden]> [cc.ReadBody(req.argv.Interface())]
+
+[go server.handleRequest(cc, req, sending, wg)] -d-> [req.replyv = 'xxx']
+[req.replyv = 'xxx'] - -[hidden]> [server.sendResponse(cc, req.h, req.replyv.Interface(), sending)]
+
+note right of "conn, err = socket.Accept()"
+接受请求 (tcp)
+end note
+
+note right of "go server.serveConn(conn)"
+go协程处理连接
+end note
+
+note right of "json.NewDecoder(conn).Decode(&opt)"
+尝试从数据头部解析出option，得到编码类型CodecType，
+只实现了gob编码
+end note
+
+note right of a
+获取创建对应Codec对象的函数, Codec类封装了
+怎么从conn中read, write，解析header和body的方法
+end note
+
+note right of "h, err := server.readRequestHeader(cc)"
+解析Header
+end note
+
+note right of "cc.ReadBody(req.argv.Interface())"
+解析Body
+end note
+
+note right of "req := &request{h: h}"
+解析出的header和body信息放在req结构体里
+end note
+
+note right of 数据 
+格式
+
+| Option | Header1 | Body1 | Header2 | Body2 | ...... |
+
+* Option用json编码，含有MagicNumber和CodecType字段
+* Header和Body用CodecType编码
+* 允许多个Header和Body可以实现在一次TCP连接进行多个RPC调用
+
+end note
+
+note bottom of "go server.handleRequest(cc, req, sending, wg)"
+* sending互斥锁用来保证sendResponse时发送完整的响应。
+防止不同handleRequest协程交错响应客户端。
+* wg WaitGroup用来等所有handleRequest协程退出后，才退出
+serveCodec函数，关闭连接。
+
+end note
+@enduml
+
+PlantUML version 1.2022.4beta2(Unknown compile time)
+(GPL source distribution)
+Java Runtime: Java(TM) SE Runtime Environment
+JVM: Java HotSpot(TM) 64-Bit Server VM
+Default Encoding: UTF-8
+Language: en
+Country: US
+--></g></svg>
