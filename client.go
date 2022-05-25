@@ -2,9 +2,12 @@ package Go_RPC
 
 import (
 	"Go-RPC/codec"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
+	"log"
+	"net"
 	"sync"
 )
 
@@ -91,7 +94,7 @@ func (client *Client) removeCall(seq uint64) *Call {
  * @param {error} err
  * @return {*}
  */
-func (client *Client) termianate(err error) {
+func (client *Client) termianateCalls(err error) {
 	client.sending.Lock()
 	defer client.sending.Unlock()
 	client.mu.Lock()
@@ -119,6 +122,77 @@ func (client *Client) receive() {
 			err = client.cc.ReadBody(nil)
 		case h.Error != "":
 			call.Error = fmt.Errorf(h.Error)
+			err = client.cc.ReadBody(nil)
+			call.done()
+		default:
+			err = client.cc.ReadBody(call.Reply)
+			if err != nil {
+				call.Error = errors.New("reding body " + err.Error())
+			}
+			call.done()
 		}
 	}
+	client.termianateCalls(err)
+}
+
+func NewClient(conn net.Conn, opt *Option) (*Client, error) {
+
+	f := codec.NewCodecFuncMap[opt.CodecType]
+	if f == nil {
+		err := fmt.Errorf("invalid codec type %s", opt.CodecType)
+		log.Println("rpc client codec error:", err)
+		return nil, err
+	}
+
+	if err := json.NewEncoder(conn).Encode(opt); err != nil {
+		log.Println("rpc client options error:", err)
+		_ = conn.Close()
+		return nil, err
+	}
+
+	return newClientCodec(f(conn), opt), nil
+}
+
+func newClientCodec(cc codec.Codec, opt *Option) *Client {
+
+	client := &Client{
+		seq:     1,
+		cc:      cc,
+		opt:     opt,
+		pending: make(map[uint64]*Call),
+	}
+	go client.receive()
+	return client
+}
+
+func parseOptions(opts ...*Option) (*Option, error) {
+	if len(opts) == 0 || opts[0] == nil {
+		return DefaultOption, nil
+	}
+	if len(opts) != 1 {
+		return nil, errors.New("number of options is more than 1")
+	}
+	opt := opts[0]
+	opt.MagicNumber = DefaultOption.MagicNumber
+	if opt.CodecType == "" {
+		opt.CodecType = DefaultOption.CodecType
+	}
+	return opt, nil
+}
+
+func Dial(network, address string, opts ...*Option) (client *Client, err error) {
+	opt, err := parseOptions(opts...)
+	if err != nil {
+		return nil, err
+	}
+	conn, err := net.Dial(network, address)
+	if err != nil {
+		return nil, err
+	}
+	defer func() {
+		if client == nil {
+			_ = conn.Close()
+		}
+	}()
+	return NewClient(conn, opt)
 }
