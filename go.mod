@@ -1,3 +1,3 @@
-module Go-RPC
+module gorpc
 
 go 1.18

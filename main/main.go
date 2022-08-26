@@ -1,14 +1,24 @@
 package main
 
 import (
-	gorpc "Go-RPC"
-	"Go-RPC/codec"
 	"encoding/json"
 	"fmt"
+	"gorpc"
+	"gorpc/codec"
 	"log"
 	"net"
 	"time"
 )
+
+func startServer(addr chan string) {
+	l, err := net.Listen("tcp", ":0")
+	if err != nil {
+		log.Fatalf("network error: %+v", err)
+	}
+	log.Printf("start rpc server on: %+v", l.Addr())
+	addr <- l.Addr().String()
+	gorpc.Accept(l)
+}
 
 func main() {
 	addr := make(chan string)
@@ -18,6 +28,7 @@ func main() {
 	defer func() { _ = conn.Close() }()
 
 	time.Sleep(time.Second)
+
 	_ = json.NewEncoder(conn).Encode(gorpc.DefaultOption)
 	cc := codec.NewGobCodec(conn)
 
@@ -26,21 +37,10 @@ func main() {
 			ServiceMethod: "Foo.Sum",
 			Seq:           uint64(i),
 		}
-
-		_ = cc.Write(h, fmt.Sprintf("rpc req %d", h.Seq))
-		_ = cc.ReaderHeader(h)
-		var reply string
+		_ = cc.Write(h, fmt.Sprintf("gorpc req %d", h.Seq))
+		_ = cc.ReadHeader(h)
+		var reply = "a"
 		_ = cc.ReadBody(&reply)
-		log.Println("reply: ", reply)
+		log.Printf("reply: %+v", reply)
 	}
-}
-
-func startServer(addr chan string) {
-	l, err := net.Listen("tcp", ":0")
-	if err != nil {
-		log.Fatal("network error: ", err)
-	}
-	log.Println("start rpc server on", l.Addr())
-	addr <- l.Addr().String()
-	gorpc.Accept(l)
 }

@@ -1,9 +1,9 @@
-package Go_RPC
+package gorpc
 
 import (
-	"Go-RPC/codec"
 	"encoding/json"
 	"fmt"
+	"gorpc/codec"
 	"io"
 	"log"
 	"net"
@@ -11,9 +11,12 @@ import (
 	"sync"
 )
 
+// 服务端报文设计
+// 在单次连接中，报文可能是下面这样的：
+// | Option | Header1 | Body1 | Header2 | Body2 | ...
+
 const MagicNumber = 0x3bef5c
 
-// 请求Option部分
 type Option struct {
 	MagicNumber int
 	CodecType   codec.Type
@@ -24,23 +27,26 @@ var DefaultOption = &Option{
 	CodecType:   codec.GobType,
 }
 
+// 服务端实现
+
 type Server struct{}
 
 func NewServer() *Server {
 	return &Server{}
 }
 
+// DefaultServer 提供一个默认实例
 var DefaultServer = NewServer()
 
-// 服务端接收请求，开启服务连接goroutine
-func (server Server) Accept(lis net.Listener) {
+// Accept 循环等待socket连接，开启子协程进行处理
+func (s *Server) Accept(lis net.Listener) {
 	for {
 		conn, err := lis.Accept()
 		if err != nil {
-			log.Println("rpc server accept error: ", err)
+			log.Printf("rpc server: accept error: %+v", err)
 			return
 		}
-		go server.ServeConn(conn)
+		go s.ServeConn(conn)
 	}
 }
 
@@ -48,97 +54,98 @@ func Accept(lis net.Listener) {
 	DefaultServer.Accept(lis)
 }
 
-// 服务连接
-func (server *Server) ServeConn(conn io.ReadWriteCloser) {
+// ServeConn 处理报文Option部分
+func (s *Server) ServeConn(conn io.ReadWriteCloser) {
 	defer func() {
 		_ = conn.Close()
 	}()
 	var opt Option
 	if err := json.NewDecoder(conn).Decode(&opt); err != nil {
-		log.Println("rpc server option error: ", err)
+		log.Printf("rpc server: option error: %+v", err)
 		return
 	}
 	if opt.MagicNumber != MagicNumber {
-		log.Printf("rpc server: invalid magic number %x", opt.MagicNumber)
+		log.Printf("rpc server: invalid magic number: %+v", opt.MagicNumber)
 		return
 	}
-	f := codec.NewCodecFuncMap[opt.CodecType]
-	if f == nil {
-		log.Printf("rpc server: invalid codec type %s", opt.CodecType)
+	codeType := codec.NewCodecFuncMap[opt.CodecType]
+	if codeType == nil {
+		log.Printf("rpc server: invalid codec type: %+v", opt.CodecType)
 		return
 	}
-	server.serverCodec(f(conn))
+	s.serveCodec(codeType(conn))
 }
 
 var invalidRequest = struct{}{}
 
-// 服务端处理
-func (server Server) serverCodec(cc codec.Codec) {
+func (s *Server) serveCodec(cc codec.Codec) {
 	sending := new(sync.Mutex)
 	wg := new(sync.WaitGroup)
+
 	for {
-		req, err := server.readRequest(cc)
+		req, err := s.readRequest(cc)
 		if err != nil {
 			if req == nil {
 				break
 			}
-			req.h.Error = err.Error()
-			server.sendResponse(cc, req.h, invalidRequest, sending)
+			req.header.Error = err.Error()
+			s.sendResponse(cc, req.header, invalidRequest, sending)
 			continue
 		}
 		wg.Add(1)
-		go server.handleRequest(cc, req, sending, wg)
-
+		go s.handleRequest(cc, req, sending, wg)
 	}
 	wg.Wait()
 	_ = cc.Close()
 }
 
-// request 数据结构
 type request struct {
-	h           *codec.Header
-	argv, reply reflect.Value
+	header     *codec.Header
+	arg, reply reflect.Value
 }
 
-// 读取请求头
-func (server Server) readRequestHeader(cc codec.Codec) (*codec.Header, error) {
+// 读取请求中的Header
+func (s *Server) readRequestHeader(cc codec.Codec) (*codec.Header, error) {
 	var h codec.Header
-	if err := cc.ReaderHeader(&h); err != nil {
+	if err := cc.ReadHeader(&h); err != nil {
 		if err != io.EOF && err != io.ErrUnexpectedEOF {
-			log.Println("rpc server: read header error:", err)
+			log.Printf("rpc server: read header error: %+v", err)
 		}
 		return nil, err
 	}
 	return &h, nil
 }
 
-// 读取request——包括requestHeader+requestBody
-func (server *Server) readRequest(cc codec.Codec) (*request, error) {
-	h, err := server.readRequestHeader(cc)
+// 读取请求
+func (s *Server) readRequest(cc codec.Codec) (*request, error) {
+	h, err := s.readRequestHeader(cc)
 	if err != nil {
 		return nil, err
 	}
-	req := &request{h: h}
-	req.argv = reflect.New(reflect.TypeOf(""))
-	if err = cc.ReadBody(req.argv.Interface()); err != nil {
-		log.Println("rpc server: read argv err:", err)
+	req := &request{
+		header: h,
+	}
+
+	req.arg = reflect.New(reflect.TypeOf(""))
+	if err := cc.ReadBody(req.arg.Interface()); err != nil {
+		log.Printf("rpc server: read arg err: %+v", err)
 	}
 	return req, nil
 }
 
-// 返回应答信息
-func (server *Server) sendResponse(cc codec.Codec, h *codec.Header, body interface{}, sending *sync.Mutex) {
+// 回复请求
+func (s *Server) sendResponse(cc codec.Codec, header *codec.Header, body interface{}, sending *sync.Mutex) {
 	sending.Lock()
 	defer sending.Unlock()
-	if err := cc.Write(h, body); err != nil {
-		log.Println("rpc server: write response error:", err)
+	if err := cc.Write(header, body); err != nil {
+		log.Printf("rpc server: write response error: %+v", err)
 	}
 }
 
-// 处理request
-func (server *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
+// 处理请求
+func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
 	defer wg.Done()
-	log.Println(req.h, req.argv.Elem())
-	req.reply = reflect.ValueOf(fmt.Sprintf("rpc response %d", req.h.Seq))
-	server.sendResponse(cc, req.h, req.reply.Interface(), sending)
+	log.Println(req.header, req.arg.Elem())
+	req.reply = reflect.ValueOf(fmt.Sprintf("rpc resp %+v", req.header.Seq))
+	s.sendResponse(cc, req.header, req.reply.Interface(), sending)
 }
