@@ -127,7 +127,7 @@ func (s *Server) readRequest(cc codec.Codec) (*request, error) {
 	}
 
 	req.arg = reflect.New(reflect.TypeOf(""))
-	if err := cc.ReadBody(req.arg.Interface()); err != nil {
+	if err = cc.ReadBody(req.arg.Interface()); err != nil {
 		log.Printf("rpc server: read arg err: %+v", err)
 	}
 	return req, nil

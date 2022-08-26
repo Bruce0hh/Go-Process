@@ -39,7 +39,7 @@ func main() {
 		}
 		_ = cc.Write(h, fmt.Sprintf("gorpc req %d", h.Seq))
 		_ = cc.ReadHeader(h)
-		var reply = "a"
+		var reply string
 		_ = cc.ReadBody(&reply)
 		log.Printf("reply: %+v", reply)
 	}

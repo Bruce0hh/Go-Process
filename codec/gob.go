@@ -16,31 +16,31 @@ type GobCodec struct {
 	enc  *gob.Encoder
 }
 
-func (g GobCodec) Close() error {
+func (g *GobCodec) Close() error {
 	return g.conn.Close()
 }
 
-func (g GobCodec) ReadHeader(header *Header) error {
+func (g *GobCodec) ReadHeader(header *Header) error {
 	return g.dec.Decode(header)
 }
 
-func (g GobCodec) ReadBody(body interface{}) error {
+func (g *GobCodec) ReadBody(body interface{}) error {
 	return g.dec.Decode(body)
 }
 
-func (g GobCodec) Write(header *Header, body interface{}) (err error) {
+func (g *GobCodec) Write(header *Header, body interface{}) (err error) {
 	defer func() {
 		_ = g.buf.Flush()
 		if err != nil {
 			_ = g.Close()
 		}
 	}()
-	if err := g.enc.Encode(header); err != nil {
+	if err = g.enc.Encode(header); err != nil {
 		log.Printf("rpc codec: gob error encoding header:%+v", err)
 		return err
 	}
 
-	if err := g.enc.Encode(header); err != nil {
+	if err = g.enc.Encode(body); err != nil {
 		log.Printf("rpc codec: gob error encoding body:%+v", err)
 		return err
 	}
