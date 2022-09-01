@@ -22,10 +22,10 @@ func startServer(addr chan string) {
 
 func main() {
 
-	log.SetFlags(0)
+	log.SetFlags(0) // 不输出任何的日志信息头
 	addr := make(chan string)
-	go startServer(addr)
-	c, _ := client.Dial("tcp", <-addr)
+	go startServer(addr)               // 开启服务端
+	c, _ := client.Dial("tcp", <-addr) // 开启客户端通信
 	defer func() { c.Close() }()
 	time.Sleep(time.Second)
 
