@@ -10,6 +10,7 @@ import (
 	"log"
 	"net"
 	"sync"
+	"time"
 )
 
 // Call 一次RPC调用所需要的信息
@@ -172,23 +173,51 @@ func parseOptions(opts ...*gorpc.Option) (*gorpc.Option, error) {
 	return opt, nil
 }
 
-// Dial 通信
-func Dial(network, address string, opts ...*gorpc.Option) (client *Client, err error) {
+// 超时处理
+type clientResult struct {
+	client *Client
+	err    error
+}
 
+type newClientFunc func(conn net.Conn, opt *gorpc.Option) (client *Client, err error)
+
+func dialTimeout(f newClientFunc, network, address string, opts ...*gorpc.Option) (client *Client, err error) {
 	opt, err := parseOptions(opts...)
 	if err != nil {
 		return nil, err
 	}
-	conn, err := net.Dial(network, address)
+	conn, err := net.DialTimeout(network, address, opt.ConnectTimeout)
 	if err != nil {
 		return nil, err
 	}
+
 	defer func() {
-		if client == nil {
+		if err != nil {
 			_ = conn.Close()
 		}
 	}()
-	return NewClient(conn, opt)
+
+	ch := make(chan clientResult)
+	go func() {
+		client, err := f(conn, opt)
+		ch <- clientResult{client: client, err: err}
+	}()
+	if opt.ConnectTimeout == 0 {
+		result := <-ch
+		return result.client, result.err
+	}
+
+	select {
+	case <-time.After(opt.ConnectTimeout):
+		return nil, fmt.Errorf("rpc client: connect timeout: expect within %s", opt.ConnectTimeout)
+	case result := <-ch:
+		return result.client, result.err
+	}
+}
+
+// Dial 通信
+func Dial(network, address string, opts ...*gorpc.Option) (client *Client, err error) {
+	return dialTimeout(NewClient, network, address, opts...)
 }
 
 func (client *Client) send(call *Call) {
