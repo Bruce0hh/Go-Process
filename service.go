@@ -7,11 +7,12 @@ import (
 	"sync/atomic"
 )
 
+// 包含了一个方法的完整信息
 type methodType struct {
-	method    reflect.Method
-	ArgType   reflect.Type
-	ReplyType reflect.Type
-	numCalls  uint64
+	method    reflect.Method // 方法本身
+	ArgType   reflect.Type   // 第一个参数类型
+	ReplyType reflect.Type   // 第二个参数类型
+	numCalls  uint64         // 统计方法调用次数
 }
 
 func (m *methodType) NumCalls() uint64 {
