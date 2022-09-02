@@ -3,6 +3,7 @@ package gorpc
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"gorpc/codec"
 	"io"
 	"log"
@@ -133,7 +134,7 @@ func (s *Server) serveCodec(cc codec.Codec) {
 			continue
 		}
 		wg.Add(1)
-		go s.handleRequest(cc, req, sending, wg)
+		go s.handleRequest(cc, req, sending, wg, time.Second*10)
 	}
 	wg.Wait()
 	_ = cc.Close()
@@ -196,12 +197,37 @@ func (s *Server) sendResponse(cc codec.Codec, header *codec.Header, body interfa
 }
 
 // 处理请求
-func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
+func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup, timeout time.Duration) {
 	defer wg.Done()
-	if err := req.svc.call(req.mType, req.arg, req.reply); err != nil {
-		req.header.Error = err.Error()
-		s.sendResponse(cc, req.header, invalidRequest, sending)
+	called := make(chan struct{})
+	sent := make(chan struct{})
+
+	// 为了确保sendResponse仅调用一次，因此将整个过程拆分成called和sent两个阶段
+	go func() {
+		err := req.svc.call(req.mType, req.arg, req.reply)
+		called <- struct{}{}
+		if err != nil {
+			req.header.Error = err.Error()
+			s.sendResponse(cc, req.header, invalidRequest, sending)
+			sent <- struct{}{}
+			return
+		}
+		s.sendResponse(cc, req.header, req.reply.Interface(), sending)
+		sent <- struct{}{}
+	}()
+
+	if timeout == 0 {
+		<-called
+		<-sent
 		return
 	}
-	s.sendResponse(cc, req.header, req.reply.Interface(), sending)
+
+	select {
+	case <-time.After(timeout): // time.After() 先接收到消息，说明处理已经超时，called和sent都会被阻塞
+		req.header.Error = fmt.Sprintf("rpc server: request handle timeout: expect within %s", timeout)
+		s.sendResponse(cc, req.header, invalidRequest, sending)
+	case <-called: // called收到消息，说明处理没有超时，执行sendRequest
+		<-sent
+
+	}
 }
