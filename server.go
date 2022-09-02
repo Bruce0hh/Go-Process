@@ -2,12 +2,13 @@ package gorpc
 
 import (
 	"encoding/json"
-	"fmt"
+	"errors"
 	"gorpc/codec"
 	"io"
 	"log"
 	"net"
 	"reflect"
+	"strings"
 	"sync"
 )
 
@@ -27,9 +28,44 @@ var DefaultOption = &Option{
 	CodecType:   codec.GobType,
 }
 
-// 服务端实现
+// Server 服务端实现
+type Server struct {
+	serviceMap sync.Map
+}
 
-type Server struct{}
+func (s *Server) Register(rec interface{}) error {
+	svc := newService(rec)
+	if _, dup := s.serviceMap.LoadOrStore(svc.name, svc); dup {
+		return errors.New("rpc: server already registered: " + svc.name)
+	}
+	return nil
+}
+
+func Register(rec interface{}) error {
+	return DefaultServer.Register(rec)
+}
+
+func (s *Server) findService(serviceMethod string) (svc *service, mType *methodType, err error) {
+
+	dot := strings.LastIndex(serviceMethod, ".")
+	if dot < 0 {
+		err = errors.New("rpc server: service/method: " + serviceMethod)
+		return
+	}
+	serviceName, methodName := serviceMethod[:dot], serviceMethod[dot+1:]
+	svci, ok := s.serviceMap.Load(serviceName)
+	if !ok {
+		err = errors.New("rpc server: can't not find service: " + serviceName)
+		return
+	}
+	svc = svci.(*service)
+	mType = svc.method[methodName]
+	if mType == nil {
+		err = errors.New("rpc server: can't find method: " + methodName)
+	}
+
+	return
+}
 
 func NewServer() *Server {
 	return &Server{}
@@ -102,6 +138,8 @@ func (s *Server) serveCodec(cc codec.Codec) {
 type request struct {
 	header     *codec.Header
 	arg, reply reflect.Value
+	mType      *methodType
+	svc        *service
 }
 
 // 读取请求中的Header
@@ -126,9 +164,20 @@ func (s *Server) readRequest(cc codec.Codec) (*request, error) {
 		header: h,
 	}
 
-	req.arg = reflect.New(reflect.TypeOf(""))
-	if err = cc.ReadBody(req.arg.Interface()); err != nil {
+	req.svc, req.mType, err = s.findService(h.ServiceMethod)
+	if err != nil {
+		return req, nil
+	}
+	req.arg = req.mType.newArgv()
+	req.reply = req.mType.newReply()
+
+	argv := req.arg.Interface()
+	if req.arg.Type().Kind() != reflect.Ptr {
+		argv = req.arg.Addr().Interface()
+	}
+	if err = cc.ReadBody(argv); err != nil {
 		log.Printf("rpc server: read arg err: %+v", err)
+		return req, nil
 	}
 	return req, nil
 }
@@ -145,7 +194,10 @@ func (s *Server) sendResponse(cc codec.Codec, header *codec.Header, body interfa
 // 处理请求
 func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup) {
 	defer wg.Done()
-	log.Println(req.header, req.arg.Elem())
-	req.reply = reflect.ValueOf(fmt.Sprintf("rpc resp %+v", req.header.Seq))
+	if err := req.svc.call(req.mType, req.arg, req.reply); err != nil {
+		req.header.Error = err.Error()
+		s.sendResponse(cc, req.header, invalidRequest, sending)
+		return
+	}
 	s.sendResponse(cc, req.header, req.reply.Interface(), sending)
 }
