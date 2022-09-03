@@ -8,6 +8,7 @@ import (
 	"io"
 	"log"
 	"net"
+	"net/http"
 	"reflect"
 	"strings"
 	"sync"
@@ -231,4 +232,40 @@ func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex
 	case <-called: // called收到消息，说明处理没有超时，执行sendRequest
 		<-sent
 	}
+}
+
+// 支持HTTP
+const (
+	connected        = "200 Connected to Go RPC"
+	defaultRPCPath   = "/_gorpc_"
+	defaultDebugPath = "/debug/gorpc"
+)
+
+// 实现ServeHTTP回应RPC请求
+func (s *Server) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	if req.Method != "CONNECT" {
+		w.Header().Set("Content-Type", "text/plain: charset=utf-8")
+		w.WriteHeader(http.StatusMethodNotAllowed)
+		_, _ = io.WriteString(w, "405 must CONNECT\n")
+		return
+	}
+	conn, _, err := w.(http.Hijacker).Hijack()
+	if err != nil {
+		log.Printf("rpc hijacking %v: %v", req.RemoteAddr, err.Error())
+		return
+	}
+
+	_, _ = io.WriteString(conn, "HTTP/1.0 "+connected+"\n\n")
+	s.ServeConn(conn)
+
+}
+
+func (s *Server) HandleHTTP() {
+	http.Handle(defaultRPCPath, s)
+	http.Handle(defaultDebugPath, debugHTTP{s})
+	log.Printf("rpc server debug path: %v\n", defaultDebugPath)
+}
+
+func HandleHTTP() {
+	DefaultServer.HandleHTTP()
 }

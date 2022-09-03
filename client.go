@@ -1,15 +1,17 @@
-package client
+package gorpc
 
 import (
+	"bufio"
 	"context"
 	"encoding/json"
 	"errors"
 	"fmt"
-	"gorpc"
 	"gorpc/codec"
 	"io"
 	"log"
 	"net"
+	"net/http"
+	"strings"
 	"sync"
 	"time"
 )
@@ -30,7 +32,7 @@ func (c *Call) done() {
 
 type Client struct {
 	cc       codec.Codec // 消息解码器
-	opt      *gorpc.Option
+	opt      *Option
 	sending  sync.Mutex   // 保证请求有序，防止多个报文混淆
 	header   codec.Header // 客户端每次只处理一个请求，所以header可以复用
 	mu       sync.Mutex
@@ -128,7 +130,7 @@ func (client *Client) receive() {
 }
 
 // NewClient Client实例处理
-func NewClient(conn net.Conn, opt *gorpc.Option) (*Client, error) {
+func NewClient(conn net.Conn, opt *Option) (*Client, error) {
 	f := codec.NewCodecFuncMap[opt.CodecType]
 	if f == nil {
 		err := fmt.Errorf("invalid codec type %s", opt.CodecType)
@@ -146,7 +148,7 @@ func NewClient(conn net.Conn, opt *gorpc.Option) (*Client, error) {
 }
 
 // 根据编解码将Options信息发送给Server，调用receive()
-func newClientCodec(cc codec.Codec, opt *gorpc.Option) *Client {
+func newClientCodec(cc codec.Codec, opt *Option) *Client {
 	client := &Client{
 		cc:      cc,
 		opt:     opt,
@@ -158,18 +160,18 @@ func newClientCodec(cc codec.Codec, opt *gorpc.Option) *Client {
 }
 
 // 解析options
-func parseOptions(opts ...*gorpc.Option) (*gorpc.Option, error) {
+func parseOptions(opts ...*Option) (*Option, error) {
 
 	if len(opts) == 0 || opts[0] == nil {
-		return gorpc.DefaultOption, nil
+		return DefaultOption, nil
 	}
 	if len(opts) != 1 {
 		return nil, errors.New("number of options is more than 1")
 	}
 	opt := opts[0]
-	opt.MagicNumber = gorpc.DefaultOption.MagicNumber
+	opt.MagicNumber = DefaultOption.MagicNumber
 	if opt.CodecType == "" {
-		opt.CodecType = gorpc.DefaultOption.CodecType
+		opt.CodecType = DefaultOption.CodecType
 	}
 	return opt, nil
 }
@@ -180,9 +182,9 @@ type clientResult struct {
 	err    error
 }
 
-type newClientFunc func(conn net.Conn, opt *gorpc.Option) (client *Client, err error)
+type newClientFunc func(conn net.Conn, opt *Option) (client *Client, err error)
 
-func dialTimeout(f newClientFunc, network, address string, opts ...*gorpc.Option) (client *Client, err error) {
+func dialTimeout(f newClientFunc, network, address string, opts ...*Option) (client *Client, err error) {
 	opt, err := parseOptions(opts...)
 	if err != nil {
 		return nil, err
@@ -217,7 +219,7 @@ func dialTimeout(f newClientFunc, network, address string, opts ...*gorpc.Option
 }
 
 // Dial 通信
-func Dial(network, address string, opts ...*gorpc.Option) (client *Client, err error) {
+func Dial(network, address string, opts ...*Option) (client *Client, err error) {
 	return dialTimeout(NewClient, network, address, opts...)
 }
 
@@ -274,5 +276,39 @@ func (client *Client) Call(ctx context.Context, serviceMethod string, args, repl
 		return errors.New("rpc client: call failed: " + ctx.Err().Error())
 	case call := <-call.Done:
 		return call.Error
+	}
+}
+
+// NewHTTPClient HTTP 客户端
+func NewHTTPClient(conn net.Conn, opt *Option) (*Client, error) {
+	_, _ = io.WriteString(conn, fmt.Sprintf("CONNECT %v HTTP/1.0\n\n", defaultRPCPath))
+
+	resp, err := http.ReadResponse(bufio.NewReader(conn), &http.Request{Method: "CONNECT"})
+	if err == nil && resp.Status == connected {
+		return NewClient(conn, opt)
+	}
+	if err != nil {
+		err = errors.New("unexpected HTTP response: " + resp.Status)
+	}
+	return nil, err
+}
+
+func DialHTTP(network, address string, opts ...*Option) (*Client, error) {
+	return dialTimeout(NewHTTPClient, network, address, opts...)
+}
+
+// XDial HTTP 通信
+func XDial(rpcAddr string, opts ...*Option) (*Client, error) {
+	parts := strings.Split(rpcAddr, "@")
+	if len(parts) != 2 {
+		return nil, fmt.Errorf("rpc client err: wrong format '%s', expect protocol@addr", rpcAddr)
+	}
+
+	protocol, addr := parts[0], parts[1]
+	switch protocol {
+	case "http":
+		return DialHTTP("tcp", addr, opts...)
+	default:
+		return Dial(protocol, addr, opts...)
 	}
 }

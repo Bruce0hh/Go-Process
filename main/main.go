@@ -3,9 +3,9 @@ package main
 import (
 	"context"
 	"gorpc"
-	"gorpc/client"
 	"log"
 	"net"
+	"net/http"
 	"sync"
 	"time"
 )
@@ -28,22 +28,20 @@ func startServer(addr chan string) {
 		log.Fatal("register error: ", err)
 	}
 
-	l, err := net.Listen("tcp", ":0")
+	l, err := net.Listen("tcp", ":9999")
 	if err != nil {
 		log.Fatalf("network error: %+v", err)
 	}
 	log.Printf("start rpc server on: %+v", l.Addr())
+	gorpc.HandleHTTP()
 	addr <- l.Addr().String()
-	gorpc.Accept(l)
+	//gorpc.Accept(l)
+	_ = http.Serve(l, nil)
 }
 
-func main() {
-
-	log.SetFlags(0) // 不输出任何的日志信息头
-	addr := make(chan string)
-	go startServer(addr)               // 开启服务端
-	c, _ := client.Dial("tcp", <-addr) // 开启客户端通信
-	defer func() { c.Close() }()
+func call(addrCh chan string) {
+	c, _ := gorpc.DialHTTP("tcp", <-addrCh)
+	defer func() { _ = c.Close() }()
 	time.Sleep(time.Second)
 
 	var wg sync.WaitGroup
@@ -60,4 +58,13 @@ func main() {
 		}(i)
 	}
 	wg.Wait()
+}
+
+func main() {
+
+	log.SetFlags(0) // 不输出任何的日志信息头
+	addr := make(chan string)
+	go call(addr)
+	startServer(addr) // 开启服务端
+
 }

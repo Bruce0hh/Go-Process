@@ -1,8 +1,7 @@
-package client
+package gorpc
 
 import (
 	"context"
-	"gorpc"
 	"net"
 	"strings"
 	"testing"
@@ -19,10 +18,10 @@ func (b Bar) Timeout(argv int, reply *int) error {
 
 func startServer(addr chan string) {
 	var b Bar
-	_ = gorpc.Register(&b)
+	_ = Register(&b)
 	l, _ := net.Listen("tcp", ":0")
 	addr <- l.Addr().String()
-	gorpc.Accept(l)
+	Accept(l)
 }
 
 func TestClient_Call(t *testing.T) {
@@ -36,7 +35,7 @@ func TestClient_Call(t *testing.T) {
 	client, _ := Dial("tcp", addr)
 	ctx, _ := context.WithTimeout(context.Background(), time.Second)
 	// 客户端无限制，服务端设置超时时间为1s
-	client2, _ := Dial("tcp", addr, &gorpc.Option{HandleTimeout: time.Second})
+	client2, _ := Dial("tcp", addr, &Option{HandleTimeout: time.Second})
 	ctx2 := context.Background()
 
 	type args struct {
@@ -91,7 +90,7 @@ func TestClient_Call(t *testing.T) {
 func Test_dialTimeout(t *testing.T) {
 	t.Parallel()
 	l, _ := net.Listen("tcp", ":0")
-	f := func(conn net.Conn, opt *gorpc.Option) (client *Client, err error) {
+	f := func(conn net.Conn, opt *Option) (client *Client, err error) {
 		_ = conn.Close()
 		time.Sleep(time.Second * 2)
 		return nil, nil
@@ -101,7 +100,7 @@ func Test_dialTimeout(t *testing.T) {
 		f       newClientFunc
 		network string
 		address string
-		opts    []*gorpc.Option
+		opts    []*Option
 	}
 	tests := []struct {
 		name    string
@@ -112,14 +111,14 @@ func Test_dialTimeout(t *testing.T) {
 			f:       f,
 			network: "tcp",
 			address: l.Addr().String(),
-			opts:    []*gorpc.Option{{ConnectTimeout: time.Second}},
+			opts:    []*Option{{ConnectTimeout: time.Second}},
 		}, true},
 		{
 			"test-no-timeout", args{
 				f:       f,
 				network: "tcp",
 				address: l.Addr().String(),
-				opts:    []*gorpc.Option{{ConnectTimeout: 0}},
+				opts:    []*Option{{ConnectTimeout: 0}},
 			}, true},
 	}
 
