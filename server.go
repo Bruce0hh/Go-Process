@@ -196,7 +196,7 @@ func (s *Server) sendResponse(cc codec.Codec, header *codec.Header, body interfa
 	}
 }
 
-// 处理请求 todo：假设没有sent
+// 处理请求 server通过for+go调用该方法，channel容易造成内存泄露 todo:控制channel关闭
 func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup, timeout time.Duration) {
 	defer wg.Done()
 	called := make(chan struct{})

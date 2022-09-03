@@ -120,8 +120,7 @@ func Test_dialTimeout(t *testing.T) {
 				network: "tcp",
 				address: l.Addr().String(),
 				opts:    []*gorpc.Option{{ConnectTimeout: 0}},
-			}, true,
-		},
+			}, true},
 	}
 
 	for _, tt := range tests {
