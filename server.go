@@ -196,7 +196,7 @@ func (s *Server) sendResponse(cc codec.Codec, header *codec.Header, body interfa
 	}
 }
 
-// 处理请求
+// 处理请求 todo：假设没有sent
 func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex, wg *sync.WaitGroup, timeout time.Duration) {
 	defer wg.Done()
 	called := make(chan struct{})
@@ -216,18 +216,19 @@ func (s *Server) handleRequest(cc codec.Codec, req *request, sending *sync.Mutex
 		sent <- struct{}{}
 	}()
 
+	// 设置超时时间为0的情况
 	if timeout == 0 {
 		<-called
 		<-sent
 		return
 	}
 
+	// 常用的超时处理：select+time.After()
 	select {
 	case <-time.After(timeout): // time.After() 先接收到消息，说明处理已经超时，called和sent都会被阻塞
 		req.header.Error = fmt.Sprintf("rpc server: request handle timeout: expect within %s", timeout)
 		s.sendResponse(cc, req.header, invalidRequest, sending)
 	case <-called: // called收到消息，说明处理没有超时，执行sendRequest
 		<-sent
-
 	}
 }
