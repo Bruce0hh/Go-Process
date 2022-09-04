@@ -20,6 +20,15 @@ type XClient struct {
 	clients   map[string]*gorpc.Client
 }
 
+func NewXClient(d Discovery, mode SelectMode, opt *gorpc.Option) *XClient {
+	return &XClient{
+		discovery: d,
+		mode:      mode,
+		opt:       opt,
+		clients:   make(map[string]*gorpc.Client),
+	}
+}
+
 func (x *XClient) Close() error {
 	x.mu.Lock()
 	defer x.mu.Unlock()
