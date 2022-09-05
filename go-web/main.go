@@ -7,17 +7,20 @@ import (
 )
 
 func main() {
-	http.HandleFunc("/", indexHandler)
-	http.HandleFunc("/hello", helloHandler)
-	log.Fatal(http.ListenAndServe(":9999", nil))
+	log.Fatal(http.ListenAndServe(":9999", new(Engine)))
 }
 
-func helloHandler(w http.ResponseWriter, request *http.Request) {
-	for k, v := range request.Header {
-		_, _ = fmt.Fprintf(w, "Header[%v] = %v\n", k, v)
+type Engine struct{}
+
+func (e *Engine) ServeHTTP(w http.ResponseWriter, req *http.Request) {
+	switch req.URL.Path {
+	case "/":
+		_, _ = fmt.Fprintf(w, "URL.Path = %v\n", req.URL.Path)
+	case "/hello":
+		for k, v := range req.Header {
+			_, _ = fmt.Fprintf(w, "Header[%v] = %v", k, v)
+		}
+	default:
+		_, _ = fmt.Fprintf(w, "404 NOT FOUND: %v", req.URL)
 	}
-}
-
-func indexHandler(w http.ResponseWriter, request *http.Request) {
-	_, _ = fmt.Fprintf(w, "URL.Path = %v\n", request.URL.Path)
 }
