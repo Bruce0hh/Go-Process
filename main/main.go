@@ -3,9 +3,11 @@ package main
 import (
 	"context"
 	"gorpc"
+	"gorpc/registry"
 	"gorpc/xclient"
 	"log"
 	"net"
+	"net/http"
 	"sync"
 	"time"
 )
@@ -44,26 +46,36 @@ func foo(x *xclient.XClient, ctx context.Context, typ, servicedMethod string, ar
 	}
 }
 
-func startServer(addr chan string) {
+func startRegistry(wg *sync.WaitGroup) {
+	l, _ := net.Listen("tcp", ":9999")
+	registry.HandleHTTP()
+	wg.Done()
+	_ = http.Serve(l, nil)
+}
+
+func startServer(registryAddr string, wg *sync.WaitGroup) {
 
 	var foo Foo
+	// 启动服务端，注册服务
 	server := gorpc.NewServer()
 	if err := server.Register(&foo); err != nil {
 		log.Fatal("register error: ", err)
 	}
-
+	// 开启tcp端口监听
 	l, err := net.Listen("tcp", ":0")
 	if err != nil {
 		log.Fatalf("network error: %+v", err)
 	}
 	log.Printf("start rpc server on: %+v", l.Addr())
-	addr <- l.Addr().String()
+	// 对端口开启心跳机制
+	registry.HeartBeat(registryAddr, "tcp@"+l.Addr().String(), 0)
+	wg.Done()
 	server.Accept(l)
 }
 
-// 调用单服务实例
-func callSingle(addr1, addr2 string) {
-	d := xclient.NewMultiServerDiscovery([]string{"tcp@" + addr1, "tcp@" + addr2})
+// 调用实例
+func callRegistry(registry string) {
+	d := xclient.NewRegistryDiscovery(registry, 0)
 	x := xclient.NewXClient(d, xclient.RandomSelect, nil)
 	defer func() { _ = x.Close() }()
 
@@ -82,8 +94,8 @@ func callSingle(addr1, addr2 string) {
 }
 
 // 调用所有服务实例
-func broadcast(addr1, addr2 string) {
-	d := xclient.NewMultiServerDiscovery([]string{"tcp@" + addr1, "tcp@" + addr2})
+func broadcast(registry string) {
+	d := xclient.NewRegistryDiscovery(registry, 0)
 	x := xclient.NewXClient(d, xclient.RandomSelect, nil)
 	defer func() { _ = x.Close() }()
 
@@ -124,17 +136,19 @@ func call(addrCh chan string) {
 func main() {
 
 	log.SetFlags(0) // 不输出任何的日志信息头
-
-	ch1 := make(chan string)
-	ch2 := make(chan string)
-
-	go startServer(ch1)
-	go startServer(ch2)
-
-	addr1 := <-ch1
-	addr2 := <-ch2
+	registryAddr := "http://localhost:9999/_gorpc_/registry"
+	var wg sync.WaitGroup
+	wg.Add(1)
+	go startRegistry(&wg)
+	wg.Wait()
 
 	time.Sleep(time.Second)
-	callSingle(addr1, addr2)
-	broadcast(addr1, addr2)
+	wg.Add(2)
+	go startServer(registryAddr, &wg)
+	go startServer(registryAddr, &wg)
+	wg.Wait()
+
+	time.Sleep(time.Second)
+	callRegistry(registryAddr)
+	broadcast(registryAddr)
 }
