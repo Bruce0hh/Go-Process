@@ -10,7 +10,6 @@ type HandlerFunc func(ctx *Context)
 type RouterGroup struct {
 	prefix      string        // 前缀
 	middlewares []HandlerFunc // 支持中间件
-	parent      *RouterGroup  // 支持嵌套
 	engine      *Engine       // 所有资源通过Engine统一协调
 }
 
@@ -36,7 +35,6 @@ func (g *RouterGroup) Group(prefix string) *RouterGroup {
 	engine := g.engine
 	newGroup := &RouterGroup{
 		prefix: g.prefix + prefix,
-		parent: g,
 		engine: engine,
 	}
 	engine.groups = append(engine.groups, newGroup)
