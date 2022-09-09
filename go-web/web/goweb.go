@@ -1,13 +1,23 @@
 package web
 
 import (
+	"log"
 	"net/http"
 )
 
 type HandlerFunc func(ctx *Context)
 
+type RouterGroup struct {
+	prefix      string        // 前缀
+	middlewares []HandlerFunc // 支持中间件
+	parent      *RouterGroup  // 支持嵌套
+	engine      *Engine       // 所有资源通过Engine统一协调
+}
+
 type Engine struct {
+	*RouterGroup
 	router *router
+	groups []*RouterGroup // 保存所有groups
 }
 
 func (e *Engine) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
@@ -16,19 +26,35 @@ func (e *Engine) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
 }
 
 func New() *Engine {
-	return &Engine{router: newRouter()}
+	engine := &Engine{router: newRouter()}
+	engine.RouterGroup = &RouterGroup{engine: engine}
+	engine.groups = []*RouterGroup{engine.RouterGroup}
+	return engine
 }
 
-func (e *Engine) addRoute(method, pattern string, handler HandlerFunc) {
-	e.router.addRouter(method, pattern, handler)
+func (g *RouterGroup) Group(prefix string) *RouterGroup {
+	engine := g.engine
+	newGroup := &RouterGroup{
+		prefix: g.prefix + prefix,
+		parent: g,
+		engine: engine,
+	}
+	engine.groups = append(engine.groups, newGroup)
+	return newGroup
 }
 
-func (e *Engine) GET(pattern string, handler HandlerFunc) {
-	e.addRoute("GET", pattern, handler)
+func (g *RouterGroup) addRoute(method, pattern string, handler HandlerFunc) {
+	pattern = g.prefix + pattern
+	log.Printf("Route %v - %v\n", method, pattern)
+	g.engine.router.addRouter(method, pattern, handler)
 }
 
-func (e *Engine) POST(pattern string, handler HandlerFunc) {
-	e.addRoute("POST", pattern, handler)
+func (g *RouterGroup) GET(pattern string, handler HandlerFunc) {
+	g.addRoute("GET", pattern, handler)
+}
+
+func (g *RouterGroup) POST(pattern string, handler HandlerFunc) {
+	g.addRoute("POST", pattern, handler)
 }
 
 func (e *Engine) Run(addr string) error {
