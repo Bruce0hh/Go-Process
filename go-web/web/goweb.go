@@ -3,6 +3,7 @@ package web
 import (
 	"log"
 	"net/http"
+	"strings"
 )
 
 type HandlerFunc func(ctx *Context)
@@ -20,7 +21,14 @@ type Engine struct {
 }
 
 func (e *Engine) ServeHTTP(writer http.ResponseWriter, request *http.Request) {
+	var middlewares []HandlerFunc
+	for _, group := range e.groups {
+		if strings.HasPrefix(request.URL.Path, group.prefix) {
+			middlewares = append(middlewares, group.middlewares...)
+		}
+	}
 	c := newContext(writer, request)
+	c.handlers = middlewares
 	e.router.handle(c)
 }
 
@@ -53,6 +61,10 @@ func (g *RouterGroup) GET(pattern string, handler HandlerFunc) {
 
 func (g *RouterGroup) POST(pattern string, handler HandlerFunc) {
 	g.addRoute("POST", pattern, handler)
+}
+
+func (g *RouterGroup) Use(middlewares ...HandlerFunc) {
+	g.middlewares = append(g.middlewares, middlewares...)
 }
 
 func (e *Engine) Run(addr string) error {
