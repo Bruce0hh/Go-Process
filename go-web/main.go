@@ -2,7 +2,9 @@ package main
 
 import (
 	"goweb/web"
+	"log"
 	"net/http"
+	"time"
 )
 
 func main() {
@@ -52,5 +54,21 @@ func main() {
 		})
 	})
 
+	v3 := r.Group("/v3")
+	v3.Use(onlyForV3())
+	{
+		v3.GET("/hello/:name", func(ctx *web.Context) {
+			ctx.String(http.StatusOK, "hello %v, you're at %v\n", ctx.Param("name"), ctx.Path)
+		})
+	}
+
 	_ = r.Run(":9999")
+}
+
+func onlyForV3() web.HandlerFunc {
+	return func(ctx *web.Context) {
+		t := time.Now()
+		ctx.String(500, "Internal Server Error\n")
+		log.Printf("[%d] %s in %v for group v3\n", ctx.StatusCode, ctx.Req.RequestURI, time.Since(t))
+	}
 }
