@@ -44,6 +44,12 @@ func New() *Engine {
 	return engine
 }
 
+func Default() *Engine {
+	engine := New()
+	engine.Use(Logger(), Recovery())
+	return engine
+}
+
 func (g *RouterGroup) Group(prefix string) *RouterGroup {
 	engine := g.engine
 	newGroup := &RouterGroup{

@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	r := web.New()
+	r := web.Default()
+
 	r.GET("/", func(c *web.Context) {
 		c.HTML(http.StatusOK, "<h1>Hello World!</h1>", nil)
 	})
@@ -61,6 +62,11 @@ func main() {
 			ctx.String(http.StatusOK, "hello %v, you're at %v\n", ctx.Param("name"), ctx.Path)
 		})
 	}
+
+	r.GET("/panic", func(ctx *web.Context) {
+		name := []string{"myName"}
+		ctx.String(http.StatusOK, name[10])
+	})
 
 	_ = r.Run(":9999")
 }
