@@ -10,13 +10,13 @@ import (
 func main() {
 	r := web.New()
 	r.GET("/", func(c *web.Context) {
-		c.HTML(http.StatusOK, "<h1>Hello World!</h1>")
+		c.HTML(http.StatusOK, "<h1>Hello World!</h1>", nil)
 	})
 
 	v1 := r.Group("/v1")
 	{
 		v1.GET("/", func(c *web.Context) {
-			c.HTML(http.StatusOK, "<h1>Hello World!</h1>")
+			c.HTML(http.StatusOK, "<h1>Hello World!</h1>", nil)
 		})
 		v1.GET("/hello", func(c *web.Context) {
 			c.String(http.StatusOK, "hello", c.Path)
