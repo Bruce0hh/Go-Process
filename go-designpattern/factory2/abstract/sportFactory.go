@@ -7,14 +7,14 @@ import (
 	"go-designpattern/factory2/abstract/sportfactory"
 )
 
+var sportsFactoryMap = map[string]sportfactory.ISportsFactory{
+	"adidas": &adidas.Adidas{},
+	"nike":   &nike.Nike{},
+}
+
 func GetSportsFactory(brand string) (sportfactory.ISportsFactory, error) {
-	if brand == "adidas" {
-		return &adidas.Adidas{}, nil
+	if f, ok := sportsFactoryMap[brand]; ok {
+		return f, nil
 	}
-
-	if brand == "nike" {
-		return &nike.Nike{}, nil
-	}
-
 	return nil, fmt.Errorf("wrong brand type passed")
 }
