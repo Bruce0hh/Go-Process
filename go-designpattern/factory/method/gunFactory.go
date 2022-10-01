@@ -2,7 +2,7 @@ package method
 
 import "fmt"
 
-func getGun(gunType string) (IGun, error) {
+func GetGun(gunType string) (IGun, error) {
 	if gunType == "ak47" {
 		return newAk47(), nil
 	}

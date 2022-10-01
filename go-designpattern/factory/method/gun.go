@@ -13,11 +13,11 @@ func (g *Gun) setPower(power int) {
 	g.power = power
 }
 
-func (g *Gun) getName() string {
+func (g *Gun) GetName() string {
 	return g.name
 }
 
-func (g *Gun) getPower() int {
+func (g *Gun) GetPower() int {
 	return g.power
 }
 
