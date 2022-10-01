@@ -1,4 +1,4 @@
-package abstract
+package sportfactory
 
 type IShoe interface {
 	setLogo(logo string)
@@ -8,24 +8,24 @@ type IShoe interface {
 }
 
 type Shoe struct {
-	logo string
-	size int
+	Logo string
+	Size int
 }
 
 func (s *Shoe) setLogo(logo string) {
-	s.logo = logo
+	s.Logo = logo
 }
 
 func (s *Shoe) setSize(size int) {
-	s.size = size
+	s.Size = size
 }
 
 func (s *Shoe) GetLogo() string {
-	return s.logo
+	return s.Logo
 }
 
 func (s *Shoe) GetSize() int {
-	return s.size
+	return s.Size
 }
 
 var _ IShoe = (*Shoe)(nil)

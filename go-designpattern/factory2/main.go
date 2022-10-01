@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"go-designpattern/factory2/abstract"
+	"go-designpattern/factory2/abstract/sportfactory"
 )
 
 func main() {
@@ -22,14 +23,14 @@ func main() {
 	printShirtDetails(adidasShirt)
 }
 
-func printShoeDetails(s abstract.IShoe) {
+func printShoeDetails(s sportfactory.IShoe) {
 	fmt.Printf("Logo: %s", s.GetLogo())
 	fmt.Println()
 	fmt.Printf("Size: %d", s.GetSize())
 	fmt.Println()
 }
 
-func printShirtDetails(s abstract.IShirt) {
+func printShirtDetails(s sportfactory.IShirt) {
 	fmt.Printf("Logo: %s", s.GetLogo())
 	fmt.Println()
 	fmt.Printf("Size: %d", s.GetSize())

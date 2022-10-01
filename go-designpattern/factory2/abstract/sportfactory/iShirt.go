@@ -1,4 +1,4 @@
-package abstract
+package sportfactory
 
 type IShirt interface {
 	setLogo(logo string)
@@ -8,24 +8,24 @@ type IShirt interface {
 }
 
 type Shirt struct {
-	logo string
-	size int
+	Logo string
+	Size int
 }
 
 func (s *Shirt) setLogo(logo string) {
-	s.logo = logo
+	s.Logo = logo
 }
 
 func (s *Shirt) setSize(size int) {
-	s.size = size
+	s.Size = size
 }
 
 func (s *Shirt) GetLogo() string {
-	return s.logo
+	return s.Logo
 }
 
 func (s *Shirt) GetSize() int {
-	return s.size
+	return s.Size
 }
 
 var _ IShirt = (*Shirt)(nil)
