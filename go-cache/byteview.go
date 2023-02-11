@@ -5,16 +5,16 @@ type ByteView struct {
 	b []byte
 }
 
-func (b *ByteView) Len() int {
+func (b ByteView) Len() int {
 	return len(b.b)
 }
 
-func (b *ByteView) String() string {
+func (b ByteView) String() string {
 	return string(b.b)
 }
 
 // ByteSlice 返回拷贝，防止缓存值被外部程序修改
-func (b *ByteView) ByteSlice() []byte {
+func (b ByteView) ByteSlice() []byte {
 	return cloneBytes(b.b)
 }
 
