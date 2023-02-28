@@ -7,7 +7,7 @@ import (
 )
 
 func main() {
-	// 创建一个每秒限流10次的滑动窗口计数器
+	// 创建一个每10秒限流10次的滑动窗口计数器
 	swc := rate_limiter.NewSlidingWindowCounter(10, 10)
 
 	// 每200毫秒调用一次 Incr
